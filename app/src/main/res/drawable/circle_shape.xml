@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/uber_white"/>
+            <stroke android:width="2dp" android:color="@color/uber_black"/>
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/strathmore"
+        android:bottom="55dp"
+        android:left="55dp"
+        android:right="55dp"
+        android:top="55dp"/>
+</layer-list>

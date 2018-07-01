@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ridefinder">
+
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/estimatesLayout"
+        tools:context=".ridefinder" />
+
+    <RelativeLayout
+        android:id="@+id/estimatesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="93dp"
+        android:layout_above="@+id/foundPassengersLayout">
+
+        <TextView
+            android:id="@+id/personOneEstimate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/personTwoEstimate"
+            android:layout_alignParentStart="true"
+            android:text="X minutes to Person Y" />
+
+        <TextView
+            android:id="@+id/personTwoEstimate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/strathmoreEstimate"
+            android:layout_alignParentStart="true"
+            android:text="X minutes to Person Y" />
+
+        <TextView
+            android:id="@+id/strathmoreEstimate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:text="X minutes to Strathmore" />
+
+        <TextView
+            android:id="@+id/costEstimate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/personOneEstimate"
+            android:layout_alignStart="@+id/estimatesLayout"
+            android:text="Expected price: $10" />
+
+        <TextView
+            android:id="@+id/timeEstmate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/costEstimate"
+            android:layout_alignParentStart="true"
+            android:text="Expected time: 10 min" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/foundPassengersLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/requestUber"
+        android:layout_alignParentStart="true"
+        android:background="@android:color/darker_gray"
+        android:orientation="horizontal"
+        android:paddingTop="1dp">
+
+        <TextView
+            android:id="@+id/passengerOne"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/imageView"
+            android:background="@android:color/white"
+            android:gravity="center_vertical|center_horizontal"
+            android:padding="2dp"
+            android:text="Person 1"
+            android:textStyle="bold"
+            app:fontFamily="casual" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toStartOf="@+id/passengerTwo"
+            android:background="@android:color/white"
+            android:paddingRight="3dp"
+            app:srcCompat="@drawable/whatsapp" />
+
+        <TextView
+            android:id="@+id/passengerTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/divider"
+            android:layout_toLeftOf="@+id/imageView2"
+            android:background="@android:color/white"
+            android:gravity="center_vertical|center_horizontal"
+            android:padding="2dp"
+            android:text="Person 2"
+            android:textStyle="bold"
+            app:fontFamily="casual" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/white"
+            android:paddingRight="3dp"
+            app:srcCompat="@drawable/whatsapp" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/darker_gray" />
+    </RelativeLayout>
+
+    <com.uber.sdk.android.rides.RideRequestButton
+        android:id="@+id/requestUber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:ub__style="black" >
+
+    </com.uber.sdk.android.rides.RideRequestButton>
+
+</RelativeLayout>
