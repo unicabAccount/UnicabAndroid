@@ -34,7 +34,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     int RC_SIGN_IN;
     RideRequestButton requestButton;
     SessionConfiguration config;
-
+    private final String TAG = "login";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,12 +84,14 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     private void updateUI(GoogleSignInAccount googleSignInAccount){
         if (googleSignInAccount == null) {
             // Request uber
-            Toast.makeText(this, "Could not login", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Could not login, please try again", Toast.LENGTH_SHORT).show();
             Intent myIntent = new Intent(this, ridefinder.class);
             this.startActivity(myIntent);
         } else {
             Intent myIntent = new Intent(this, ridefinder.class);
             this.startActivity(myIntent);
+            Log.e(TAG, "updateUI: showing google account display name::" + googleSignInAccount.getDisplayName());
+            Log.e(TAG, "updateUI: showing google account email" + googleSignInAccount.getEmail() );
             }
     }
 }
