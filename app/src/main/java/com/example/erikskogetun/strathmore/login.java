@@ -32,6 +32,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN;
+<<<<<<< HEAD
     GoogleSignInAccount account;
     GoogleApiClient mGoogleApiClient;
     RequestQueue queue;
@@ -46,6 +47,11 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         super.onStart();
     }
 
+=======
+    RideRequestButton requestButton;
+    SessionConfiguration config;
+    private final String TAG = "login";
+>>>>>>> c568c7752ea65130882e091649004075cad57e06
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +107,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 
     private void updateUI(GoogleSignInAccount googleSignInAccount) {
         if (googleSignInAccount == null) {
+<<<<<<< HEAD
             Toast.makeText(this, "Could not login", Toast.LENGTH_SHORT).show();
         } else {
             queue = Volley.newRequestQueue(this);
@@ -126,6 +133,17 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                 }
             });
             queue.add(stringRequest);
+=======
+            // Request uber
+            Toast.makeText(this, "Could not login, please try again", Toast.LENGTH_SHORT).show();
+            Intent myIntent = new Intent(this, ridefinder.class);
+            this.startActivity(myIntent);
+        } else {
+            Intent myIntent = new Intent(this, ridefinder.class);
+            this.startActivity(myIntent);
+            Log.e(TAG, "updateUI: showing google account display name::" + googleSignInAccount.getDisplayName());
+            Log.e(TAG, "updateUI: showing google account email" + googleSignInAccount.getEmail() );
+>>>>>>> c568c7752ea65130882e091649004075cad57e06
             }
     }
 
