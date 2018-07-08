@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ridefinder">
 
-
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -18,48 +17,86 @@
     <RelativeLayout
         android:id="@+id/estimatesLayout"
         android:layout_width="match_parent"
-        android:layout_height="93dp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/foundPassengersLayout">
 
         <TextView
             android:id="@+id/personOneEstimate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/personTwoEstimate"
-            android:layout_alignParentStart="true"
-            android:text="X minutes to Person Y" />
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@+id/divider2"
+            android:gravity="center_horizontal"
+            android:paddingBottom="5dp"
+            android:text="X minutes to Person Y"
+            android:textSize="12sp"
+            app:fontFamily="casual" />
 
         <TextView
             android:id="@+id/personTwoEstimate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/strathmoreEstimate"
-            android:layout_alignParentStart="true"
-            android:text="X minutes to Person Y" />
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/personOneEstimate"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/divider2"
+            android:gravity="center_horizontal"
+            android:paddingBottom="5dp"
+            android:text="X minutes to Person Y"
+            android:textSize="12sp"
+            app:fontFamily="casual" />
 
         <TextView
             android:id="@+id/strathmoreEstimate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:text="X minutes to Strathmore" />
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/personTwoEstimate"
+            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@+id/divider2"
+            android:gravity="center_horizontal"
+            android:paddingBottom="5dp"
+            android:text="X minutes to Strathmore"
+            android:textSize="12sp"
+            app:fontFamily="casual" />
 
         <TextView
             android:id="@+id/costEstimate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/personOneEstimate"
-            android:layout_alignStart="@+id/estimatesLayout"
-            android:text="Expected price: $10" />
+            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@+id/personOneEstimate"
+            android:gravity="center_horizontal"
+            android:paddingBottom="5dp"
+            android:paddingStart="3dp"
+            android:text="Expected price: $10"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:fontFamily="casual" />
 
         <TextView
             android:id="@+id/timeEstmate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/costEstimate"
-            android:layout_alignParentStart="true"
-            android:text="Expected time: 10 min" />
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/costEstimate"
+            android:layout_toStartOf="@+id/divider2"
+            android:gravity="center_horizontal"
+            android:paddingBottom="5dp"
+            android:paddingEnd="3dp"
+            android:text="Expected time: 10 min"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:fontFamily="casual" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="1dp"
+            android:layout_height="71dp"
+            android:layout_centerHorizontal="true"
+            android:background="?android:attr/listDivider" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -70,7 +107,8 @@
         android:layout_alignParentStart="true"
         android:background="@android:color/darker_gray"
         android:orientation="horizontal"
-        android:paddingTop="1dp">
+        android:paddingTop="1dp"
+        android:layout_alignParentLeft="true">
 
         <TextView
             android:id="@+id/passengerOne"
@@ -79,7 +117,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/imageView"
+            android:layout_toLeftOf="@+id/whatsappOne"
             android:background="@android:color/white"
             android:gravity="center_vertical|center_horizontal"
             android:padding="2dp"
@@ -88,14 +126,18 @@
             app:fontFamily="casual" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/whatsappOne"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_gravity="center_vertical"
+            android:layout_toLeftOf="@+id/passengerTwo"
             android:layout_toStartOf="@+id/passengerTwo"
             android:background="@android:color/white"
+            android:onClick="whatsApp"
+            android:paddingLeft="3dp"
             android:paddingRight="3dp"
+            android:tag="two"
             app:srcCompat="@drawable/whatsapp" />
 
         <TextView
@@ -104,7 +146,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/divider"
-            android:layout_toLeftOf="@+id/imageView2"
+            android:layout_toLeftOf="@+id/whatsappTwo"
             android:background="@android:color/white"
             android:gravity="center_vertical|center_horizontal"
             android:padding="2dp"
@@ -113,14 +155,17 @@
             app:fontFamily="casual" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/whatsappTwo"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="center_vertical"
             android:background="@android:color/white"
+            android:onClick="whatsApp"
+            android:paddingLeft="3dp"
             android:paddingRight="3dp"
+            android:tag="two"
             app:srcCompat="@drawable/whatsapp" />
 
         <View
@@ -140,5 +185,17 @@
         app:ub__style="black" >
 
     </com.uber.sdk.android.rides.RideRequestButton>
+
+    <Button
+        android:id="@+id/logOutButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:onClick="logOutGoogle"
+        android:text="Log Out"
+        android:textColor="@color/colorPrimaryDark" />
 
 </RelativeLayout>

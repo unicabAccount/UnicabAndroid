@@ -1,53 +1,61 @@
 package com.example.erikskogetun.strathmore;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 
-import com.uber.sdk.android.core.UberSdk;
-import com.uber.sdk.android.rides.RideParameters;
-import com.uber.sdk.android.rides.RideRequestButton;
-import com.uber.sdk.core.auth.Scope;
-import com.uber.sdk.rides.client.ServerTokenSession;
-import com.uber.sdk.rides.client.SessionConfiguration;
-import com.uber.sdk.rides.client.model.PriceEstimate;
-import com.uber.sdk.rides.client.model.TimeEstimate;
-
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class login extends AppCompatActivity implements View.OnClickListener {
 
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN;
-    RideRequestButton requestButton;
-    SessionConfiguration config;
+    GoogleSignInAccount account;
+    GoogleApiClient mGoogleApiClient;
+    RequestQueue queue;
+    String url;
+
+    protected void onStart() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         RC_SIGN_IN = 1337;
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
     }
 
     @Override
@@ -71,26 +79,86 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            updateUI(account);
-            } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            account = completedTask.getResult(ApiException.class);
+            if (account.getEmail().split("@")[1].equals("strathmore.edu")) {
+                updateUI(account);
+            } else {
+                Toast.makeText(this, "You need to log in with a strathmore email, try to sign in again", Toast.LENGTH_SHORT).show();
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                mGoogleApiClient.disconnect();
+                                mGoogleApiClient.connect();
+                            }
+                        });
+            }
+        } catch (ApiException e) {
             Log.w("Google Login", "signInResult:failed code=" + e.getStatusCode());
             updateUI(null);
         }
     }
 
-    private void updateUI(GoogleSignInAccount googleSignInAccount){
+    private void updateUI(GoogleSignInAccount googleSignInAccount) {
         if (googleSignInAccount == null) {
-            // Request uber
             Toast.makeText(this, "Could not login", Toast.LENGTH_SHORT).show();
-            Intent myIntent = new Intent(this, ridefinder.class);
-            this.startActivity(myIntent);
         } else {
-            Intent myIntent = new Intent(this, ridefinder.class);
-            this.startActivity(myIntent);
+            queue = Volley.newRequestQueue(this);
+            url = "http://206.189.174.133/api/userInDatabase/?email=" + googleSignInAccount.getEmail();
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // The user exists and may enter
+                            Intent myIntent = new Intent(getApplicationContext(), ridefinder.class);
+                            getApplication().startActivity(myIntent);
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error.networkResponse.statusCode == 404){
+                        // TO-DO
+                        // The user does not exist in the database, so needs to be added
+                        // Insert code for adding to database by POST
+                        postUser();
+
+                    }
+                }
+            });
+            queue.add(stringRequest);
             }
+    }
+
+
+    private void postUser(){
+        url = "http://206.189.174.133/admin/usermanager/users/add/";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(),error.networkResponse.allHeaders.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", "Alif@haha.ho");
+                return params;
+            }
+        };
+        queue.add(postRequest);
+
     }
 }
 
