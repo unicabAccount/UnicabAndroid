@@ -29,6 +29,7 @@
             android:layout_toRightOf="@+id/divider2"
             android:gravity="center_horizontal"
             android:paddingBottom="5dp"
+            android:paddingTop="5dp"
             android:text="X minutes to Person Y"
             android:textSize="12sp"
             app:fontFamily="casual" />
@@ -95,6 +96,7 @@
             android:layout_width="1dp"
             android:layout_height="71dp"
             android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             android:background="?android:attr/listDivider" />
 
     </RelativeLayout>

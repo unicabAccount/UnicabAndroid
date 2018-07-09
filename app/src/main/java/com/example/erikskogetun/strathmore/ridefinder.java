@@ -138,7 +138,7 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
                 canvas.setBitmap(bitmap);
                 circleDrawable.setBounds(0, 0, circleDrawable.getIntrinsicWidth(), circleDrawable.getIntrinsicHeight());
                 circleDrawable.draw(canvas);
-                BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, 200, 200, false));
+                BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, 100, 100, false));
                 markers.add(map.addMarker(new MarkerOptions().position(locationlist.get(i)).icon(markerIcon)));
             } else {
                 bm = icg.makeIcon("Person " + String.valueOf(i));
@@ -155,7 +155,7 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
                 }
 
                 LatLngBounds bounds = b.build();
-                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 150); // bounds & padding
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 100); // bounds & padding
                 map.animateCamera(cu);
             }
         });

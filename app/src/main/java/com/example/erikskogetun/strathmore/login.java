@@ -120,7 +120,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                         // TO-DO
                         // The user does not exist in the database, so needs to be added
                         // Insert code for adding to database by POST
-                        postUser();
+                        newUser();
 
                     }
                 }
@@ -130,33 +130,49 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
+    private void newUser(){
+        // TO-DO
+        // Open up a custom dialogue which allows the user to input their name, last name profile picture and home location.
+        postUser();
+    }
+
     private void postUser(){
-        url = "http://206.189.174.133/admin/usermanager/users/add/";
+        url = "http://206.189.174.133/api/userInDatabase/";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
                 {
                     @Override
                     public void onResponse(String response) {
-                        // response
-                        Log.d("Response", response);
+                        // The user has successfully been added to the backend
+                        Intent myIntent = new Intent(getApplicationContext(), ridefinder.class);
+                        getApplication().startActivity(myIntent);
                     }
                 },
                 new Response.ErrorListener()
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(),error.networkResponse.allHeaders.toString(), Toast.LENGTH_LONG).show();
+                        Log.d("Response", error.networkResponse.headers.toString());
                     }
                 }
-        ) {
+        )
+        {
             @Override
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-                params.put("email", "Alif@haha.ho");
+                // Gmail account does not initially have "givenName" & "familyName" for strathmore emails
+
+                params.put("email", account.getEmail());
+                // Randomize coordinates or use google places autocomplete
+                params.put("home_longitude", "0");
+                params.put("home_latitude", "0");
+                params.put("nr_of_trips_done", "0");
+
                 return params;
             }
         };
+
         queue.add(postRequest);
 
     }
