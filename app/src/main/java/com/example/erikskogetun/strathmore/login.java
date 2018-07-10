@@ -1,10 +1,15 @@
 package com.example.erikskogetun.strathmore;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,10 +28,16 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.Task;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class login extends AppCompatActivity implements View.OnClickListener {
 
@@ -110,8 +121,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                         @Override
                         public void onResponse(String response) {
                             // The user exists and may enter
-                            Intent myIntent = new Intent(getApplicationContext(), ridefinder.class);
-                            getApplication().startActivity(myIntent);
+                            startRidefinder();
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -126,13 +136,19 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                 }
             });
             queue.add(stringRequest);
-            // Request uber
         }
     }
 
     private void newUser(){
         // TO-DO
         // Open up a custom dialogue which allows the user to input their name, last name profile picture and home location.
+
+        //final Dialog dialog = new Dialog(this);
+        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //dialog.setCancelable(false);
+        //dialog.setContentView(R.layout.new_user_dialog);
+        //dialog.show();
+
         postUser();
     }
 
@@ -144,8 +160,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                     @Override
                     public void onResponse(String response) {
                         // The user has successfully been added to the backend
-                        Intent myIntent = new Intent(getApplicationContext(), ridefinder.class);
-                        getApplication().startActivity(myIntent);
+                        startRidefinder();
                     }
                 },
                 new Response.ErrorListener()
@@ -160,13 +175,16 @@ public class login extends AppCompatActivity implements View.OnClickListener {
             @Override
             protected Map<String, String> getParams()
             {
+                Looper.prepare();
                 Map<String, String> params = new HashMap<>();
-                // Gmail account does not initially have "givenName" & "familyName" for strathmore emails
+                String location[] = getRandomCoordinates();
 
+                // Gmail account does not initially have "givenName" & "familyName" for strathmore emails
                 params.put("email", account.getEmail());
+
                 // Randomize coordinates or use google places autocomplete
-                params.put("home_longitude", "0");
-                params.put("home_latitude", "0");
+                params.put("home_latitude", location[0]);
+                params.put("home_longitude", location[1]);
                 params.put("nr_of_trips_done", "0");
 
                 return params;
@@ -175,6 +193,26 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 
         queue.add(postRequest);
 
+    }
+
+    private String[] getRandomCoordinates(){
+        //Mellan LAT: -1.457733 & -1.137839;
+        //Mellan LNG: 36.587605 & 36.972126;
+        double minLat = -1.457733;
+        double maxLat = -1.137839;
+        double minLng = 36.587605;
+        double maxLng = 36.972126;
+
+        Random r = new Random();
+        double randomLat = minLat + (maxLat - minLat) * r.nextDouble();
+        double randomLng = minLng + (maxLng - minLng) * r.nextDouble();
+
+        return new String[] {String.format("%.6g%n", randomLat), String.format("%.7g%n", randomLng)};
+    }
+    private void startRidefinder(){
+        Intent myIntent = new Intent(this, ridefinder.class);
+        myIntent.putExtra("email", account.getEmail()); //Put your id to your next Intent
+        startActivity(myIntent);
     }
 }
 

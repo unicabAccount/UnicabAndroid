@@ -24,41 +24,30 @@
             android:id="@+id/personOneEstimate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_toRightOf="@+id/divider2"
             android:gravity="center_horizontal"
-            android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:text="X minutes to Person Y"
-            android:textSize="12sp"
+            android:textSize="0sp"
             app:fontFamily="casual" />
 
         <TextView
             android:id="@+id/personTwoEstimate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_below="@+id/personOneEstimate"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@+id/divider2"
+            android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
-            android:paddingBottom="5dp"
-            android:text="X minutes to Person Y"
-            android:textSize="12sp"
+            android:textSize="0sp"
             app:fontFamily="casual" />
 
         <TextView
             android:id="@+id/strathmoreEstimate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_below="@+id/personTwoEstimate"
             android:layout_centerHorizontal="true"
-            android:layout_toRightOf="@+id/divider2"
             android:gravity="center_horizontal"
-            android:paddingBottom="5dp"
-            android:text="X minutes to Strathmore"
             android:textSize="12sp"
             app:fontFamily="casual" />
 
@@ -66,51 +55,26 @@
             android:id="@+id/costEstimate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_toStartOf="@+id/personOneEstimate"
+            android:layout_below="@+id/strathmoreEstimate"
+            android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             android:paddingBottom="5dp"
             android:paddingStart="3dp"
-            android:text="Expected price: $10"
             android:textSize="12sp"
             android:textStyle="bold"
             app:fontFamily="casual" />
-
-        <TextView
-            android:id="@+id/timeEstmate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/costEstimate"
-            android:layout_toStartOf="@+id/divider2"
-            android:gravity="center_horizontal"
-            android:paddingBottom="5dp"
-            android:paddingEnd="3dp"
-            android:text="Expected time: 10 min"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:fontFamily="casual" />
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="1dp"
-            android:layout_height="71dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
-            android:background="?android:attr/listDivider" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/foundPassengersLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
         android:layout_above="@+id/requestUber"
         android:layout_alignParentStart="true"
         android:background="@android:color/darker_gray"
         android:orientation="horizontal"
-        android:paddingTop="1dp"
-        android:layout_alignParentLeft="true">
+        android:paddingTop="1dp">
 
         <TextView
             android:id="@+id/passengerOne"
@@ -118,21 +82,23 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/whatsappOne"
             android:background="@android:color/white"
             android:gravity="center_vertical|center_horizontal"
+            android:onClick="whatsApp"
             android:padding="2dp"
+            android:tag="one"
             android:text="Person 1"
             android:textStyle="bold"
             app:fontFamily="casual" />
 
         <ImageView
             android:id="@+id/whatsappOne"
-            android:layout_width="40dp"
+            android:layout_width="41dp"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
             android:layout_gravity="center_vertical"
+            android:layout_marginEnd="-1dp"
+            android:layout_marginRight="-1dp"
             android:layout_toLeftOf="@+id/passengerTwo"
             android:layout_toStartOf="@+id/passengerTwo"
             android:background="@android:color/white"
@@ -146,12 +112,15 @@
             android:id="@+id/passengerTwo"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/divider"
             android:layout_alignStart="@+id/divider"
             android:layout_toLeftOf="@+id/whatsappTwo"
+            android:layout_toStartOf="@+id/whatsappTwo"
             android:background="@android:color/white"
             android:gravity="center_vertical|center_horizontal"
+            android:onClick="whatsApp"
             android:padding="2dp"
+            android:tag="two"
             android:text="Person 2"
             android:textStyle="bold"
             app:fontFamily="casual" />
@@ -173,7 +142,7 @@
         <View
             android:id="@+id/divider"
             android:layout_width="1dp"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
             android:layout_centerHorizontal="true"
             android:background="@android:color/darker_gray" />
     </RelativeLayout>
@@ -198,6 +167,21 @@
         android:layout_alignParentTop="true"
         android:onClick="logOutGoogle"
         android:text="Log Out"
-        android:textColor="@color/colorPrimaryDark" />
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/map"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorPrimary"
+        android:padding="4dp"
+        android:text="Click to look for passengers "
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:fontFamily="casual" />
 
 </RelativeLayout>
