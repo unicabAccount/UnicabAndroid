@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
         android:layout_centerInParent="true"
+        android:orientation="horizontal"
         android:padding="20dp">
 
     </LinearLayout>
@@ -24,8 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        />
+        android:layout_alignParentTop="true" />
 
     <Button
         android:id="@+id/previousButton"
@@ -36,8 +35,8 @@
         android:layout_alignParentStart="true"
         android:background="@android:color/transparent"
         android:text="BACK"
-        android:visibility="invisible"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/colorWhite"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/nextButton"
@@ -59,6 +58,6 @@
         android:layout_alignParentRight="true"
         android:background="@android:color/transparent"
         android:text="FINISH"
-        android:visibility="invisible"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/colorWhite"
+        android:visibility="invisible" />
 </RelativeLayout>

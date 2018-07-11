@@ -84,6 +84,7 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
     String phonePerson1;
     String phonePerson2;
     RelativeLayout foundPassengersLayout;
+    RelativeLayout estimatesLayout;
     String namePassengerOne;
     String namePassengerTwo;
 
@@ -103,9 +104,7 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
         setContentView(R.layout.activity_ridefinder);
 
         foundPassengersLayout = findViewById(R.id.foundPassengersLayout);
-        ViewGroup.LayoutParams params = foundPassengersLayout.getLayoutParams();
-        params.height = 0;
-        foundPassengersLayout.setLayoutParams(params);
+        estimatesLayout = findViewById(R.id.estimatesLayout);
 
         icg = new IconGenerator(this);
         markers = new ArrayList<>();
@@ -113,6 +112,14 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
 
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("email");
+
+        TextView searchButton = findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                passengerSearch();
+            }
+        });
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -122,7 +129,6 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        map.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
 
         queue = Volley.newRequestQueue(this);
         String url = "http://206.189.174.133/api/userInDatabase/?email=" + userEmail;
@@ -167,14 +173,6 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
                 markers.add(map.addMarker(new MarkerOptions().position(locationlist.get(i)).icon(markerIcon)));
             }
         }
-
-        TextView searchButton = findViewById(R.id.searchButton);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                passengerSearch();
-            }
-        });
 
         GoogleDirection.withServerKey("AIzaSyBH9WJEpCaMWUlQo3a9P4YU-uAwhxJJHgQ")
                 .from(locationlist.get(1))
@@ -233,7 +231,7 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
         }
 
         LatLngBounds bounds = b.build();
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 125); // bounds & padding
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 140); // bounds & padding
         map.animateCamera(cu);
     }
 
@@ -271,18 +269,23 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
                     }
 
                     if (i == 0 && legs.length() != 1) {
-                        personOneEstimate.setText((int)totalDuration + " minutes to (1). " + namePassengerOne + ".");
+                        personOneEstimate.setText((int)totalDuration + " minutes to " + namePassengerOne + ".");
                         personOneEstimate.setTextSize(12);
                     } else if (i == legs.length() - 1) {
                         strathmoreEstimate.setText((int)totalDuration + " minutes to Strathmore.");
                     } else {
-                        personTwoEstimate.setText((int)totalDuration + " minutes to (2). " + namePassengerTwo + ".");
+                        personTwoEstimate.setText((int)totalDuration + " minutes to " + namePassengerTwo + ".");
                         personTwoEstimate.setTextSize(12);
                     }
                 }
                 totalFare = 100 + totalDistance * 42 + totalDuration * 3; // Uber Base Rates
 
                 costEstimate.setText("Estimated price: KSH " + (int)totalFare);
+
+                ViewGroup.LayoutParams estimateParams = estimatesLayout.getLayoutParams();
+                estimateParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                estimatesLayout.setLayoutParams(estimateParams);
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -347,22 +350,18 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
 
         Log.w("response", locationlist.toString());
 
-        ViewGroup.LayoutParams params = foundPassengersLayout.getLayoutParams();
-        params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
-        foundPassengersLayout.setLayoutParams(params);
-
         while (locationlist.size() != 2){
             locationlist.remove(2);
             markers.get(2).remove();
             markers.remove(2);
         }
 
-        locationlist.add(new LatLng(Double.valueOf(((JSONObject)jsonResponse.get(1)).get("home_latitude").toString()), Double.valueOf(((JSONObject)jsonResponse.get(1)).get("home_longitude").toString())));
         locationlist.add(new LatLng(Double.valueOf(((JSONObject)jsonResponse.get(0)).get("home_latitude").toString()), Double.valueOf(((JSONObject)jsonResponse.get(0)).get("home_longitude").toString())));
-        phonePerson1 = ((JSONObject)jsonResponse.get(1)).getString("phone_nr");
-        phonePerson2 = ((JSONObject)jsonResponse.get(0)).getString("phone_nr");
-        namePassengerOne = ((JSONObject)jsonResponse.get(1)).getString("first_name");
-        namePassengerTwo = ((JSONObject)jsonResponse.get(0)).getString("first_name");
+        locationlist.add(new LatLng(Double.valueOf(((JSONObject)jsonResponse.get(1)).get("home_latitude").toString()), Double.valueOf(((JSONObject)jsonResponse.get(1)).get("home_longitude").toString())));
+        phonePerson1 = ((JSONObject)jsonResponse.get(0)).getString("phone_nr");
+        phonePerson2 = ((JSONObject)jsonResponse.get(1)).getString("phone_nr");
+        namePassengerOne = ((JSONObject)jsonResponse.get(0)).getString("first_name");
+        namePassengerTwo = ((JSONObject)jsonResponse.get(1)).getString("first_name");
         ((TextView)findViewById(R.id.passengerOne)).setText(namePassengerOne);
         ((TextView)findViewById(R.id.passengerTwo)).setText(namePassengerTwo);
 
@@ -414,6 +413,10 @@ public class ridefinder extends AppCompatActivity implements OnMapReadyCallback 
             });
 
         setCamera();
+
+        ViewGroup.LayoutParams params = foundPassengersLayout.getLayoutParams();
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        foundPassengersLayout.setLayoutParams(params);
 
     }
 }
